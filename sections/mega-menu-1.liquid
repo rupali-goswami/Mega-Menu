@@ -1,0 +1,125 @@
+{% comment %}
+** Mega menu - homepage partial **
+- Static section
+- Uses blocks
+- Must be enabled through general settings
+{% endcomment %}
+
+{% if section.blocks.size > 0 %}
+  <div class="dropdown_container mega-menu mega-menu-1" data-dropdown="{{ section.settings.parent | handleize }}">
+    <div class="dropdown menu">
+      <div class="dropdown_content {% if section.blocks < 4 %}dropdown_narrow{% endif %}">
+        {% for block in section.blocks %}
+          <div class="dropdown_column" {{ block.shopify_attributes }}>
+            {% if block.type == 'column' %}
+              
+
+              {% comment %}Image with caption and link{% endcomment %}
+              {% if block.settings.image_top != nil or block.settings.image_caption_top != blank %}
+                <div class="mega-menu__image-caption-link">
+                  <a {% if block.settings.image_link_top != blank %}href="{{ block.settings.image_link_top }}"{% endif %} class="mega_imgs">
+                   <div class="top_img">
+                    {% if block.settings.image_top != nil %}
+                      {% include 'image-element', image: block.settings.image_top, alt: block.settings.image_top.alt %}
+                    {% endif %}
+                    </div>
+                    
+                
+                    
+                    {% if block.settings.image_caption_top != blank %}
+                      <p class="mega-menu__image-caption">{{ block.settings.image_caption_top }}</p>
+                    {% endif %}
+                  </a>
+                </div>
+              {% endif %}
+            
+           
+
+              {% comment %}Menu 1{% endcomment %}
+              {% if block.settings.menu_1 != blank %}
+                <div class="dropdown_column__menu">
+                  <ul class="dropdown_title">
+                    <li>
+                      <a {% if block.settings.menu_1_link %}href="{{ block.settings.menu_1_link }}"{% endif %}>{{ linklists[block.settings.menu_1].title }}</a>
+                    </li>
+                  </ul>
+                  {% if linklists[block.settings.menu_1] != empty %}
+                    <ul class="dropdown-menus">
+                      {% for sublink in linklists[block.settings.menu_1].links %}
+                        <li>
+                          <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+           
+
+
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+{% endif %}
+
+{% schema %}
+
+{
+  "name": "Mega menu 1",
+  "class": "mega-menu-section",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "parent",
+      "label": "Link title",
+      "info": "The mega menu will appear below this parent link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Top content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_top",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "image_link_top",
+          "label": "Image link"
+        },
+        {
+          "type": "header",
+          "content": "Navigation"
+        },
+        {
+          "type": "link_list",
+          "id": "menu_1",
+          "label": "Menu 1"
+        },
+        {
+          "type": "url",
+          "id": "menu_1_link",
+          "label": "Menu 1 link",
+          "info": "Add a link to the title of the menu."
+        }
+      ]
+    }
+  ]
+
+}
+
+{% endschema %}
